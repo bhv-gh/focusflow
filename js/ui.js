@@ -106,11 +106,10 @@ function applyDarkMode(isDark) {
 
 /**
  * Switches the visible view (Timer, Log, Reminders, or Widgets).
- * @param {'timer' | 'log' | 'reminders' | 'widgets'} viewId - The ID of the view to show.
+ * @param {'timer' | 'log' | 'reminders' | 'routines' | 'widgets'} viewId - The ID of the view to show.
  */
 function showView(viewId) {
-    // *** MODIFIED: Added viewWidgets to the list ***
-    const views = [viewTimer, viewLog, viewReminders, viewWidgets];
+    const views = [viewTimer, viewLog, viewReminders, viewRoutines, viewWidgets];
     views.forEach(view => {
         if (!view) return; // Skip if element not found
         const targetViewId = `view-${viewId}`;
@@ -134,7 +133,8 @@ function showView(viewId) {
     if (tabTimer) tabTimer.classList.toggle('active', viewId === 'timer');
     if (tabLog) tabLog.classList.toggle('active', viewId === 'log');
     if (tabReminders) tabReminders.classList.toggle('active', viewId === 'reminders');
-    if (tabWidgets) tabWidgets.classList.toggle('active', viewId === 'widgets'); // *** ADDED ***
+    if (tabRoutines) tabRoutines.classList.toggle('active', viewId === 'routines');
+    if (tabWidgets) tabWidgets.classList.toggle('active', viewId === 'widgets');
 
     // Actions specific to showing certain views
     if (viewId === 'log') {
@@ -147,6 +147,11 @@ function showView(viewId) {
         renderTimeSuggestions([], 'manual', -1);
     } else if (viewId === 'reminders') {
         renderReminders();
+    } else if (viewId === 'routines') {
+        // Render all routine components when switching to the routines view
+        renderTodaysRoutines();
+        renderAllRoutines();
+        renderRoutineProgressVisualization();
     } else if (viewId === 'widgets') {
         // Render widgets when switching to the widgets view
         renderWidgets();
@@ -1306,4 +1311,3 @@ function updateReflexGameDisplay(widgetId, widgetElement) {
 }
 
 // --- End Widget Rendering ---
-

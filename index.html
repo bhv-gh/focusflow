@@ -108,6 +108,7 @@
             <button id="tab-timer" class="tab-button active">Timer & Tasks</button>
             <button id="tab-log" class="tab-button">Daily Log</button>
             <button id="tab-reminders" class="tab-button">Reminders</button>
+            <button id="tab-routines" class="tab-button">Routines</button>
             <button id="tab-widgets" class="tab-button">Widgets</button>
         </div>
 
@@ -308,6 +309,50 @@
                         </div>
                 </div>
 
+                <div id="view-routines" class="view view-hidden h-full p-4 md:p-0 flex flex-col">
+                    <!-- Main grid layout for the Routines view -->
+                    <div class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6 h-full overflow-hidden">
+                
+                        <!-- Left Column: Today's Routines & All Routines Management -->
+                        <div class="lg:col-span-1 flex flex-col space-y-6 overflow-y-auto custom-scrollbar p-1">
+                            <!-- Today's Routines/Habits Section -->
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-3">Today's Habits</h2>
+                                <div id="todays-routines-container" class="space-y-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <p id="todays-routines-empty-msg" class="text-gray-500 dark:text-gray-400 italic text-center">No habits scheduled for today.</p>
+                                </div>
+                            </div>
+                
+                            <!-- All Routines Management Section -->
+                            <div>
+                                 <div class="flex justify-between items-center mb-3">
+                                    <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">All Routines</h2>
+                                    <button id="add-routine-button" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-1 px-3 rounded-lg shadow text-sm flex items-center space-x-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="icon icon-sm"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                        <span>New Routine</span>
+                                    </button>
+                                </div>
+                                <div id="all-routines-list" class="space-y-3">
+                                     <p id="all-routines-empty-msg" class="text-gray-500 dark:text-gray-400 italic text-center p-4">Create your first routine to get started!</p>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Right Column: Progress Visualization -->
+                        <div class="lg:col-span-2 flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                             <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Your Consistency Galaxy</h2>
+                             <p class="text-center text-gray-500 dark:text-gray-400 mb-6">Each star is a completed habit. Watch your galaxy grow as you build consistency!</p>
+                             <div id="routine-progress-visualization" class="flex-grow relative w-full h-full min-h-[300px]">
+                                 <canvas id="galaxy-canvas"></canvas>
+                             </div>
+                             <div class="flex justify-center space-x-4 mt-4 text-sm text-gray-600 dark:text-gray-300">
+                                 <span>Streak: <strong id="routine-streak" class="text-indigo-600 dark:text-indigo-400">0 days</strong></span>
+                                 <span>Completion: <strong id="routine-completion-rate" class="text-green-600 dark:text-green-400">0%</strong></span>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="view-widgets" class="view view-hidden h-full p-4 space-y-4 flex flex-col">
                     <div class="flex justify-between items-center flex-shrink-0">
                          <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Widgets</h2>
@@ -344,6 +389,50 @@
                 <button type="button" id="cancel-add-widget-button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 font-medium py-2 px-4 rounded-md">Cancel</button>
                 <button type="button" id="save-widget-button" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md shadow-sm">Add Widget</button>
             </div>
+        </div>
+    </div>
+
+    <div id="routine-modal" class="modal">
+        <div class="modal-content relative dark:bg-gray-800 dark:border-gray-600 max-w-2xl">
+            <span id="close-routine-modal-button" class="modal-close-button">&times;</span>
+            <h2 id="routine-modal-title" class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Create New Routine</h2>
+            <form id="routine-form" class="space-y-4">
+                <input type="hidden" id="routine-id-input">
+                <div>
+                    <label for="routine-name-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Routine Name</label>
+                    <input type="text" id="routine-name-input" placeholder="e.g., Morning Kickstart, Evening Wind-down" required class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+    
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Habits in this Routine</label>
+                    <div id="habits-container" class="mt-1 space-y-2">
+                        <!-- Habit inputs will be dynamically added here -->
+                    </div>
+                    <button type="button" id="add-habit-button" class="mt-2 text-sm text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium">+ Add another habit</button>
+                </div>
+    
+                <div>
+                     <label for="routine-frequency-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Frequency</label>
+                     <select id="routine-frequency-select" class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
+                         <option value="daily">Daily</option>
+                         <option value="weekly">Weekly</option>
+                         <option value="monthly" disabled>Monthly (Coming Soon)</option>
+                     </select>
+                </div>
+    
+                <div id="frequency-options-container" class="p-3 bg-gray-100 dark:bg-gray-700 rounded-md">
+                    <div id="weekly-options" class="hidden space-y-2">
+                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300">On which days?</p>
+                        <div class="flex flex-wrap gap-2" id="weekday-selector">
+                        </div>
+                    </div>
+                </div>
+    
+                 <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" id="cancel-routine-button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 font-medium py-2 px-4 rounded-md">Cancel</button>
+                    <button type="submit" id="save-routine-button" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md shadow-sm">Save Routine</button>
+                 </div>
+            </form>
         </div>
     </div>
 
@@ -534,6 +623,7 @@
     <script src="js/summary.js"></script>
     <script src="js/reminders.js"></script>
     <script src="js/featuresPopup.js"></script>
+    <script src="js/routines.js"></script>"
     <script src="js/main.js"></script>
     <script>
         // Example of potentially using the icon URL later if needed

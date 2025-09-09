@@ -28,6 +28,7 @@ function setupEventListeners() {
     if (tabTimer) tabTimer.addEventListener('click', () => showView('timer'));
     if (tabLog) tabLog.addEventListener('click', () => showView('log'));
     if (tabReminders) tabReminders.addEventListener('click', () => showView('reminders'));
+    if (tabRoutines) tabRoutines.addEventListener('click', () => showView('routines'));
     if (tabWidgets) tabWidgets.addEventListener('click', () => showView('widgets'));
 
     // Timer Controls (Main Pomodoro)
@@ -301,6 +302,16 @@ function setupEventListeners() {
     if (widgetContainer) {
         widgetContainer.addEventListener('click', handleWidgetAction); // Delegation for all widget actions
     }
+
+    // Routine Listeners
+    if (addRoutineButton) addRoutineButton.addEventListener('click', () => openRoutineModal());
+    if (closeRoutineModalButton) closeRoutineModalButton.addEventListener('click', closeRoutineModal);
+    if (cancelRoutineButton) cancelRoutineButton.addEventListener('click', closeRoutineModal);
+    if (routineModal) window.addEventListener('click', (event) => { if (event.target === routineModal) closeRoutineModal(); });
+    if (routineForm) routineForm.addEventListener('submit', (e) => { e.preventDefault(); handleSaveRoutine(); });
+    if (addHabitButton) addHabitButton.addEventListener('click', () => addHabitInput());
+    if (routineFrequencySelect) routineFrequencySelect.addEventListener('change', updateFrequencyOptionsVisibility);
+
 } // --- END setupEventListeners ---
 
 // --- Initialization ---
@@ -319,6 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
     loadLogs();
     loadReminders();
+    loadRoutines();
+    loadRoutineHistory();
     loadWidgets(); // Load widget data
 
     // Initial UI rendering

@@ -12,7 +12,9 @@ function exportData() {
             logEntries: logEntries,
             settings: settings,
             reminders: reminders,
-            widgets: widgets // *** ADDED widgets ***
+            widgets: widgets,
+            routines: routines,
+            routineHistory: routineHistory
         };
 
         // Convert the data to a formatted JSON string
@@ -81,15 +83,11 @@ function handleImportFile(event) {
             const importedData = JSON.parse(e.target.result);
 
             // Basic validation of the imported data structure
-            // *** UPDATED validation to include widgets ***
-            if (!importedData || typeof importedData !== 'object' ||
-                !importedData.hasOwnProperty('tasks') ||
-                !importedData.hasOwnProperty('projects') ||
-                !importedData.hasOwnProperty('logEntries') ||
-                !importedData.hasOwnProperty('settings') ||
-                !importedData.hasOwnProperty('reminders') ||
-                !importedData.hasOwnProperty('widgets')) { // Check for widgets key
-                throw new Error("Invalid backup file format. Missing required data sections (tasks, projects, logEntries, settings, reminders, widgets).");
+            const requiredKeys = ['tasks', 'projects', 'logEntries', 'settings', 'reminders', 'widgets', 'routines', 'routineHistory'];
+            const missingKeys = requiredKeys.filter(key => !importedData.hasOwnProperty(key));
+
+            if (missingKeys.length > 0) {
+                throw new Error(`Invalid backup file format. Missing required data sections: ${missingKeys.join(', ')}.`);
             }
 
             // ** ADDED: More detailed validation for widgets **
@@ -101,7 +99,7 @@ function handleImportFile(event) {
 
             // Show confirmation modal before overwriting data
             showConfirmationModal(
-                `Import data from "${file.name}"?\n\n⚠️ WARNING: This will OVERWRITE all current tasks, projects, logs, settings, reminders, and widgets!`,
+                `Import data from "${file.name}"?\n\n⚠️ WARNING: This will OVERWRITE all current data!`,
                 () => {
                     // --- This code runs only if the user confirms ---
                     try {
@@ -110,7 +108,9 @@ function handleImportFile(event) {
                         projects = importedData.projects || [];
                         logEntries = importedData.logEntries || {};
                         reminders = importedData.reminders || [];
-                        widgets = importedData.widgets || []; // *** ADDED widgets import ***
+                        widgets = importedData.widgets || [];
+                        routines = importedData.routines || [];
+                        routineHistory = importedData.routineHistory || {};
                         // Merge settings carefully, keeping existing defaults if new ones are missing
                         settings = { ...settings, ...(importedData.settings || {}) };
 
@@ -119,7 +119,9 @@ function handleImportFile(event) {
                         saveProjects();
                         saveLogs();
                         saveReminders();
-                        saveWidgets(); // *** ADDED saveWidgets call ***
+                        saveWidgets();
+                        saveRoutines();
+                        saveRoutineHistory();
                         saveSettings(); // This also applies theme etc.
 
                         showNotification('Import successful! Reloading application...', 'success', 4000);

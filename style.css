@@ -782,7 +782,8 @@ html.dark #aggregated-summary-text-container .project-summary-item {
  { z-index: 101; } /* Base modals */
 #settings-modal { z-index: 100; } /* Settings potentially below others if opened first */
 #inactivity-modal { z-index: 102; } /* Inactivity popup */
-#aggregated-summary-modal { z-index: 103; } /* Aggregated summary on top */
+#routine-modal { z-index: 103; } /* Routine modal */
+#aggregated-summary-modal { z-index: 104; } /* Aggregated summary on top */
 #celebration-gif { z-index: 201; } /* GIF above all modals */
 #notification-area { z-index: 200; } /* Notifications above most elements */
 #reminder-alert-modal { z-index: 105; } /* Reminder alert highest */
@@ -1396,7 +1397,7 @@ html.dark .reminder-delete-btn:hover { background-color: #450a0a; /* dark:hover:
 /* Reminder Alert Modal Snooze Buttons */
 .reminder-snooze-btn {
      /* Using Tailwind classes mostly, ensure consistency if needed */
-     /* Example: Add specific styling if Tailwind isn't enough */
+     /* Example: Add specific styling if needed */
      /* border: 1px solid #d1d5db; */
 }
 
@@ -1534,4 +1535,35 @@ html.dark .feature-item h3 {
 
 html.dark .feature-item ul li {
     color: #d1d5db !important; /* Ensure list item text is visible */
+}
+
+/* --- Routine View Styles --- */
+#view-routines .routine-grid {
+    grid-template-rows: auto 1fr;
+}
+#routine-progress-visualization {
+    background-color: #111827; /* Dark bg for contrast */
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+#galaxy-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+}
+.habit-item.completed {
+    opacity: 0.7;
+}
+.routine-list-item .routine-frequency-display {
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+.routine-list-item .routine-frequency-display .active {
+    text-shadow: 0 0 5px currentColor;
+}
+.habit-checkbox {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }

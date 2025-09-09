@@ -8,10 +8,12 @@ const bodyElement = document.body;
 const tabTimer = document.getElementById('tab-timer');
 const tabLog = document.getElementById('tab-log');
 const tabReminders = document.getElementById('tab-reminders');
+const tabRoutines = document.getElementById('tab-routines'); // Routines Tab
 const tabWidgets = document.getElementById('tab-widgets'); // Widgets Tab
 const viewTimer = document.getElementById('view-timer');
 const viewLog = document.getElementById('view-log');
 const viewReminders = document.getElementById('view-reminders');
+const viewRoutines = document.getElementById('view-routines'); // Routines View
 const viewWidgets = document.getElementById('view-widgets'); // Widgets View
 
 // Timer View Elements
@@ -75,6 +77,17 @@ const addReminderButton = document.getElementById('add-reminder-button');
 const reminderListContainer = document.getElementById('reminder-list-container');
 const reminderListEmptyMsg = document.getElementById('reminder-list-empty');
 const reminderTimeSuggestionsContainer = document.getElementById('reminder-time-suggestions');
+
+// Routines View Elements
+const todaysRoutinesContainer = document.getElementById('todays-routines-container');
+const todaysRoutinesEmptyMsg = document.getElementById('todays-routines-empty-msg');
+const addRoutineButton = document.getElementById('add-routine-button');
+const allRoutinesList = document.getElementById('all-routines-list');
+const allRoutinesEmptyMsg = document.getElementById('all-routines-empty-msg');
+const routineProgressVisualization = document.getElementById('routine-progress-visualization');
+const galaxyCanvas = document.getElementById('galaxy-canvas');
+const routineStreak = document.getElementById('routine-streak');
+const routineCompletionRate = document.getElementById('routine-completion-rate');
 
 // Settings Modal Elements
 const settingsModal = document.getElementById('settings-modal');
@@ -185,6 +198,22 @@ const reminderAlertModal = document.getElementById('reminder-alert-modal');
 const reminderAlertText = document.getElementById('reminder-alert-text');
 const reminderAlertTime = document.getElementById('reminder-alert-time');
 const reminderAckButton = document.getElementById('reminder-ack-button');
+
+// Routine Modal Elements
+const routineModal = document.getElementById('routine-modal');
+const closeRoutineModalButton = document.getElementById('close-routine-modal-button');
+const routineModalTitle = document.getElementById('routine-modal-title');
+const routineForm = document.getElementById('routine-form');
+const routineIdInput = document.getElementById('routine-id-input');
+const routineNameInput = document.getElementById('routine-name-input');
+const habitsContainer = document.getElementById('habits-container');
+const addHabitButton = document.getElementById('add-habit-button');
+const routineFrequencySelect = document.getElementById('routine-frequency-select');
+const frequencyOptionsContainer = document.getElementById('frequency-options-container');
+const weeklyOptions = document.getElementById('weekly-options');
+const weekdaySelector = document.getElementById('weekday-selector');
+const cancelRoutineButton = document.getElementById('cancel-routine-button');
+const saveRoutineButton = document.getElementById('save-routine-button');
 
 // Notification Area
 const notificationArea = document.getElementById('notification-area');

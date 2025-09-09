@@ -59,3 +59,8 @@ let activeCountdownIntervals = {};
 // --- Undo State ---
 const MAX_UNDO_HISTORY = 10;
 let recentlyCompletedTaskIds = []; // Array to store IDs of recently completed tasks
+
+// --- Routine State ---
+let routines = []; // Array of { id, name, habits: [{id, text}], frequencyType: 'daily'|'weekly', frequencyValue: [0,1,2,3,4,5,6] }
+let routineHistory = {}; // { 'YYYY-MM-DD': { habitId: completionTimestamp, ... } }
+let editingRoutineId = null; // ID of the routine being edited

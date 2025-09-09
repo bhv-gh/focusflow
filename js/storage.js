@@ -8,6 +8,8 @@ const LS_SETTINGS_KEY = 'pomodoroSettings_v10';
 const LS_LOG_KEY = 'pomodoroLogs_v4';
 const LS_REMINDERS_KEY = 'pomodoroReminders_v1';
 const LS_WIDGETS_KEY = 'pomodoroWidgets_v1'; // NEW: Key for widgets
+const LS_ROUTINES_KEY = 'focusFlowRoutines_v1'; // NEW: Key for routines
+const LS_ROUTINE_HISTORY_KEY = 'focusFlowRoutineHistory_v1'; // NEW: Key for routine history
 
 // --- Constants (related to storage defaults) ---
 const DEFAULT_PROJECT_ID = 'inbox';
@@ -539,3 +541,80 @@ function loadWidgets() {
 }
 // --- End Widget Storage ---
 
+// --- NEW: Routine Storage ---
+
+/**
+ * Saves the current routines array to local storage.
+ */
+function saveRoutines() {
+    try {
+        localStorage.setItem(LS_ROUTINES_KEY, JSON.stringify(routines));
+    } catch (e) {
+        console.error("Save routines failed:", e);
+        showNotification("Error saving routines.", "error");
+    }
+}
+
+/**
+ * Loads routines from local storage into the routines array.
+ * Performs basic validation.
+ */
+function loadRoutines() {
+    try {
+        const storedRoutines = localStorage.getItem(LS_ROUTINES_KEY);
+        if (storedRoutines) {
+            const loaded = JSON.parse(storedRoutines);
+            // Basic validation to ensure it's an array
+            if (Array.isArray(loaded)) {
+                routines = loaded;
+            } else {
+                console.warn("Stored routines data is not an array. Resetting.");
+                routines = [];
+            }
+        } else {
+            routines = [];
+        }
+    } catch (e) {
+        console.error("Load routines failed:", e);
+        routines = [];
+        showNotification("Error loading routines.", "error");
+    }
+}
+
+/**
+ * Saves the current routine history object to local storage.
+ */
+function saveRoutineHistory() {
+    try {
+        localStorage.setItem(LS_ROUTINE_HISTORY_KEY, JSON.stringify(routineHistory));
+    } catch (e) {
+        console.error("Save routine history failed:", e);
+        showNotification("Error saving routine history.", "error");
+    }
+}
+
+/**
+ * Loads routine history from local storage into the routineHistory object.
+ */
+function loadRoutineHistory() {
+    try {
+        const storedHistory = localStorage.getItem(LS_ROUTINE_HISTORY_KEY);
+        if (storedHistory) {
+            const loaded = JSON.parse(storedHistory);
+            // Basic validation to ensure it's an object
+            if (typeof loaded === 'object' && !Array.isArray(loaded) && loaded !== null) {
+                routineHistory = loaded;
+            } else {
+                 console.warn("Stored routine history data is not a valid object. Resetting.");
+                 routineHistory = {};
+            }
+        } else {
+            routineHistory = {};
+        }
+    } catch (e) {
+        console.error("Load routine history failed:", e);
+        routineHistory = {};
+        showNotification("Error loading routine history.", "error");
+    }
+}
+// --- End Routine Storage ---
